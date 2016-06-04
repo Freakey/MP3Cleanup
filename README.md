@@ -8,7 +8,7 @@ Don't you hate creating hundreds of folders just because you want your music sor
 - Fast and easy to understand for everyone
 
 ###How to use?
-1. Download the .jar-file (~todo: add link)
+1. Download the .jar-file ([Download] (https://www.dropbox.com/s/fexk0sli33astrg/MP3Cleanup.rar?dl=0))
 2. Start the program from your terminal (`java -jar MP3Cleanup.jar`)
 3. Click `Add` and select the music files you want to sort
 4. Edit the `Folder Format` and `File Name Format` text fields
@@ -29,3 +29,6 @@ Both of textfields contain placeholders, which you can use to format your file's
 
 You can use these to create your own custom format for folders and files.
 __If you don't want that, just leave the default values__
+
+
+###Download now: [Download] (https://www.dropbox.com/s/fexk0sli33astrg/MP3Cleanup.rar?dl=0)
