@@ -20,3 +20,12 @@ Don't you hate creating hundreds of folders just because you want your music sor
 
 ###How to edit Folder Format & File Name Format
 There are two settings you can specify, `Folder Format` and `File Name Format`.
+Both of textfields contain placeholders, which you can use to format your file's and folder's names.
+
+- **{TRACK}** the number of this track in the album
+- **{ALBUM}** the name of the track's album
+- **{ARTIST}** the name of the track's artist
+- **{YEAR}** the year when the track was published
+
+You can use these to create your own custom format for folders and files.
+__If you don't want that, just leave the default values__
