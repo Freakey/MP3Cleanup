@@ -37,6 +37,7 @@ public class Cleanup {
 	 * Start the cleanup
 	 */
 	public void start() {
+		System.out.println("Starting cleanup ...");
 		purgeFileList();
 		folder = getFolder();
 		generateFolderSystem();
@@ -61,14 +62,40 @@ public class Cleanup {
 			IMp3File mp3 = null;
 			if(newFiles.containsKey(file)) {
 				mp3 = newFiles.get(file);
-			} else fromFile(file);
+			} else mp3 = fromFile(file);
+			
+			finalizeMp3(mp3, file);
 			File newFile = new File(folder.getPath() + "/" + format(folderFormat.replace("{FILES}", ""), mp3), format(fileNameFormat, mp3));
+			System.out.println("Moving file: " + file.getName());
 			try {
 				Files.move(file.toPath(), newFile.toPath(), StandardCopyOption.ATOMIC_MOVE);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("[ERROR] Couldn't move the file " + file.getName());
 			}
+		}
+		
+		JOptionPane.showMessageDialog(null, "Finished sorting your .mp3-files!");
+	}
+	
+	private void finalizeMp3(IMp3File mp3, File file) {
+		while(mp3.getTitle() == null) {
+			mp3.setTitle(JOptionPane.showInputDialog(null, "Please enter a title for: ("+file.getName()+")"));
+		}
+		
+		while(mp3.getTrack() == null) {
+			mp3.setTrack(JOptionPane.showInputDialog(null, "Please enter a track for (number): ("+file.getName()+")"));
+		}
+		
+		while(mp3.getArtist() == null) {
+			mp3.setArtist(JOptionPane.showInputDialog(null, "Please enter an artist for: ("+file.getName()+")"));
+		}
+		
+		while(mp3.getYear() == null) {
+			mp3.setYear(JOptionPane.showInputDialog(null, "Please enter a year for: ("+file.getName()+")"));
+		}
+		
+		while(mp3.getAlbum() == null) {
+			mp3.setAlbum(JOptionPane.showInputDialog(null, "Please enter an album for: ("+file.getName()+")"));
 		}
 	}
 	
@@ -79,27 +106,11 @@ public class Cleanup {
 	private void generate(File file) {
 		final IMp3File mp3 = fromFile(file);
 		if(canFormat(folderFormat, mp3)) {
-			new File(folder.getPath() + "/" + format(folderFormat.replace("{FILES}", ""), mp3)).mkdirs();
+			File f = new File(folder.getPath() + "/" + format(folderFormat.replace("{FILES}", ""), mp3));;
+			f.mkdirs();
+			System.out.println("Creating folder: " + f.getName());
 		} else {
-			while(mp3.getTitle() == null) {
-				mp3.setTitle(JOptionPane.showInputDialog(null, "Please enter a title for: ("+file.getName()+")"));
-			}
-			
-			while(mp3.getTrack() == null) {
-				mp3.setTrack(JOptionPane.showInputDialog(null, "Please enter a track for (number): ("+file.getName()+")"));
-			}
-			
-			while(mp3.getArtist() == null) {
-				mp3.setArtist(JOptionPane.showInputDialog(null, "Please enter an artist for: ("+file.getName()+")"));
-			}
-			
-			while(mp3.getYear() == null) {
-				mp3.setYear(JOptionPane.showInputDialog(null, "Please enter a year for: ("+file.getName()+")"));
-			}
-			
-			while(mp3.getAlbum() == null) {
-				mp3.setAlbum(JOptionPane.showInputDialog(null, "Please enter an album for: ("+file.getName()+")"));
-			}
+			finalizeMp3(mp3, file);
 			try {
 				Mp3File mp3file = new Mp3File(file);
 				if(mp3file.hasId3v1Tag()) {
@@ -109,21 +120,19 @@ public class Cleanup {
 				}
 				mp3file.save(file.getName());
 			} catch (UnsupportedTagException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") has an unsupported tag");
 			} catch (InvalidDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") has got invalid data");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") couldn't be loaded");
 			} catch (NotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") is not supported");
 			}
 			
 			newFiles.put(file, mp3);
-			new File(folder.getPath() + "/" + format(folderFormat.replace("{FILES}", ""), mp3)).mkdirs();
+			File f = new File(folder.getPath() + "/" + format(folderFormat.replace("{FILES}", ""), mp3));
+			System.out.println("Creating folder " + f.getName());
+			f.mkdirs();
 		}
 	}
 	
@@ -151,7 +160,7 @@ public class Cleanup {
 	 * @return if the String can be formatted
 	 */
 	private boolean canFormat(String s, IMp3File mp3) {
-		if(mp3.getTrack() == null || mp3.getAlbum() == null || mp3.getArtist() == null || mp3.getYear() == null) {
+		if(mp3.getTitle() == null || mp3.getTrack() == null || mp3.getAlbum() == null || mp3.getArtist() == null || mp3.getYear() == null) {
 			return false;
 		}
 		return true;
@@ -165,6 +174,7 @@ public class Cleanup {
 	 */
 	private String format(String s, IMp3File mp3) {
 		String str = new String(s);
+		if(str.contains("{TITLE}")) str = str.replace("{TITLE}", mp3.getTitle());
 		if(str.contains("{TRACK}")) str = str.replace("{TRACK}", mp3.getTrack());
 		if(str.contains("{ALBUM}")) str = str.replace("{ALBUM}", mp3.getAlbum());
 		if(str.contains("{ARTIST}")) str = str.replace("{ARTIST}", mp3.getArtist());
@@ -187,18 +197,14 @@ public class Cleanup {
 			return null;
 			
 		} catch (UnsupportedTagException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") has an unsupported tag");
 		} catch (InvalidDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") has got invalid data");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			System.out.println("[ERROR] The selected .mp3-file ("+file.getName()+") couldn't be loaded");
 		}
+		
+		return null;
 	
 	}
 	

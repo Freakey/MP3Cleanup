@@ -10,8 +10,14 @@ public class Core {
 	private Core() {}
 	
 	private void init() {
+		System.out.println("Inititalizing MP3Cleanup.");
 		mainWindow = new MainWindow();
 		mainWindow.setVisible(true);
+		
+		System.out.println("");
+		System.out.println("   MP3Cleanup, (C) 2016, Adrian Kaiser");
+		System.out.println("");
+		System.out.println("");
 	}
 	
 	public static synchronized Core getInstance() {

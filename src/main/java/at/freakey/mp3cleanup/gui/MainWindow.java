@@ -196,8 +196,8 @@ public class MainWindow extends JFrame {
 	}
 	
 	
-	/*
-	 * remove a file
+	/**
+	 * Remove a file
 	 */
 	private void removeFile(File file) {
 		fileList.remove(file);
