@@ -9,9 +9,9 @@ Don't you hate creating hundreds of folders just because you want your music sor
 
 ###How to use?
 1. Download the .jar-file (~todo: add link)
-2. Start the program from your terminal ('java -jar MP3Cleanup.jar')
-3. Click 'Add' and select the music files you want to sort
-4. Edit the 'Folder Format' and 'File Name Format' text fields
+2. Start the program from your terminal (`java -jar MP3Cleanup.jar`)
+3. Click `Add` and select the music files you want to sort
+4. Edit the `Folder Format` and `File Name Format` text fields
 5. Click start and select a folder where the files & folders should be put in
   1. The program will probably need some extra information for some music-files, if they are not complete.
   2. If this is true, just fill in the needed information.
@@ -19,4 +19,4 @@ Don't you hate creating hundreds of folders just because you want your music sor
 
 
 ###How to edit Folder Format & File Name Format
-There are two settings you can specify, 'Folder Format' & 'File Name Format'
+There are two settings you can specify, `Folder Format` and `File Name Format`.
